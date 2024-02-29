@@ -28,6 +28,9 @@ public class OrderGenerator {
         System.out.println("3. Keluar");
     }
 
+    public static void printBarrier(){
+        System.out.println("--------------------------------------------");
+    }
     /*
      * Method ini digunakan untuk membuat ID
      * dari nama restoran, tanggal order, dan nomor telepon
@@ -51,14 +54,73 @@ public class OrderGenerator {
      *          Lokasi Pengiriman: [Kode Lokasi]
      *          Biaya Ongkos Kirim: [Total Ongkos Kirim]
      */
-    public static String generateBill(String OrderID, String lokasi){
+    public static String generateBill(String orderID, String lokasi){
         // TODO:Lengkapi method ini sehingga dapat mengenerate Bill sesuai ketentuan
         return "Bill";
     }
 
-    public static void main(String[] args) {
-        // TODO: Implementasikan program sesuai ketentuan yang diberikan
+    public static boolean checkDate(String date){
+        if (date.length() != 10){
+            return false;
+        }
+        if (date.charAt(2) != '/' || date.charAt(5) != '/'){
+            return false;
+        }
+        return true;
     }
+    public static boolean checkTelephoneNo(String noTelepon){
+        for (int i = 0;i < noTelepon.length();i++) {
+            if (!Character.isDigit(noTelepon.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        System.setErr(System.out);
+        String pilihanMenu = "";
+        String namaRestoran, tanggalPemesanan, noTelepon;
+        showMenu();
+        while (!pilihanMenu.equals("3")) {
+            printBarrier();
+            System.out.print("Pilihan menu: ");
+            pilihanMenu = input.nextLine();
+            if (pilihanMenu.equals("1")) {
+                
+            }
+            else if (pilihanMenu.equals("2")) {
+                boolean melakukanPemesanan = true;
+                while (melakukanPemesanan){
+                    System.out.println();
+                    System.out.print("Nama Restoran: ");
+                    namaRestoran = input.nextLine();
+                    if (namaRestoran.length() < 4) {
+                        System.out.println("Nama Restoran tidak valid!");
+                        continue;
+                    }
 
-    
+                    System.out.print("Tanggal Pemesanan: ");
+                    tanggalPemesanan = input.nextLine();
+                    if (checkDate(tanggalPemesanan) == false){
+                        System.out.println("Tanggal Pemesanan dalam format DD/MM/YYYY!");
+                        continue;
+                    }
+
+                    System.out.print("No. Telpon: ");
+                    noTelepon = input.nextLine();
+                    if (checkTelephoneNo(noTelepon) == false){
+                        System.out.println("Harap masukkan nomor telepon dalam bentuk bilangan bulat positif.");
+                        continue;
+                    }
+                }
+
+
+            }
+            else if (pilihanMenu.equals("3")){
+                System.out.println("Terimakasih telah menggunakan DepeFood!");
+                break;
+            }
+            printBarrier();
+        }
+    }   
 }
