@@ -3,6 +3,7 @@ package assignments.assignment2;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class MainMenu {
     private static final Scanner input = new Scanner(System.in);
     private static ArrayList<Restaurant> restoList;
