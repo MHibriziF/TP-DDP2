@@ -16,6 +16,7 @@ public class User {
         this.email = email;
         this.lokasi = lokasi;
         this.role = role;
+        this.orderHistory = new ArrayList<Order>();
     }
     
     public String getNama() {
@@ -29,5 +30,18 @@ public class User {
     public String getRole() {
         return this.role;
     }
+
+    public String getLokasi() {
+        return this.lokasi;
+    }
+
+    public ArrayList<Order> getOrderHistory() {
+        return this.orderHistory;
+    }
+    
+    public void addOrderHistory(Order item) {
+        this.orderHistory.add(item);
+    }
+
     // TODO: tambahkan methods yang diperlukan untuk class ini
 }

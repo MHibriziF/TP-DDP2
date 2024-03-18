@@ -1,7 +1,6 @@
 package assignments.assignment2;
 
 public class Menu {
-     // TODO: tambahkan attributes yang diperlukan untuk class ini
     private String namaMakanan;
     private double harga;
     public Menu(String namaMakanan, double harga){
@@ -10,8 +9,13 @@ public class Menu {
     }
 
     public String getNamaMakanan() {
-        return this.getNamaMakanan();
+        return this.namaMakanan;
     }
+
+    public double getHarga() {
+        return this.harga;
+    }
+
     
     // TODO: tambahkan methods yang diperlukan untuk class ini
 }

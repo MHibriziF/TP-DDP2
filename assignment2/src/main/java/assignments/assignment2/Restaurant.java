@@ -8,6 +8,7 @@ public class Restaurant {
     private ArrayList<Menu> menu;
     public Restaurant(String nama){
         this.nama = nama;
+        this.menu = new ArrayList<Menu>();
     }
 
     public String getNama() {
@@ -16,6 +17,10 @@ public class Restaurant {
     
     public ArrayList<Menu> getMenu() {
         return this.menu;
+    }
+
+    public void addMenu(Menu item) {
+        menu.add(item);
     }
     // TODO: tambahkan methods yang diperlukan untuk class ini
 }
