@@ -43,4 +43,8 @@ public class Order {
     public boolean getOrderFinished() {
         return this.orderFinished;
     }
+
+    public void finishOrder() {
+        this.orderFinished = true;
+    }
 }

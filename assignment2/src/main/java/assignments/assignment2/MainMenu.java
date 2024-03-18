@@ -156,7 +156,7 @@ public class MainMenu {
         bill += String.format("Tanggal Pemesanan: %s\n", pesanan.getTanggalPemesanan());
         bill += String.format("Restaurant: %s\n", pesanan.getRestaurant().getNama());
         bill += String.format("Lokasi Pengiriman: %s\n", userLoggedIn.getLokasi());
-        bill += String.format("Status Pengiriman: %s\n", pesanan.getOrderFinished() ? "Not Finished" : "Selesai");
+        bill += String.format("Status Pengiriman: %s\n", pesanan.getOrderFinished() ? "Selesai" : "Not Finished");
         bill += "Pesanan:\n";
 
         for (Menu item : pesanan.getItems()) {
@@ -170,18 +170,8 @@ public class MainMenu {
     }
 
     public static void handleLihatMenu() {
-        boolean menginputResto = true;
-        Restaurant restoran = null;
         System.out.println("--------------Lihat Menu--------------");
-        while (menginputResto) {
-            System.out.print("Nama Restoran: "  );
-            String restaurantName = input.nextLine();
-            restoran = cariResto(restaurantName);
-            if (restoran == null) {
-                System.out.println("Restoran tidak terdaftar pada sistem.\n");
-                continue;
-            } menginputResto = false;
-        }
+        Restaurant restoran = inputRestaurant();
         ArrayList<Menu> menuRestoran = restoran.getMenu();
         for (int i = 1; i <= menuRestoran.size(); i++) {
             Menu item = menuRestoran.get(i-1);
@@ -199,7 +189,10 @@ public class MainMenu {
         System.out.print("Status: ");
         String status = input.nextLine();
         if (status.equalsIgnoreCase("selesai") && !pesanan.getOrderFinished()){
-            System.out.printf("Status pesanan dengan ID %s berhasil diupdate");
+            pesanan.finishOrder();
+            System.out.printf("Status pesanan dengan ID %s berhasil diupdate!", pesanan.getOrderID());
+        } else {
+            System.out.printf("Status pesanan dengan ID %s tidak berhasil diupdate.", pesanan.getOrderID());
         }
     }
 
@@ -240,7 +233,9 @@ public class MainMenu {
                     arrayMakanan[i] += j != parts.length - 2 ? " " : "";
                 }
                 // Mengekstrak harga makanan
-                arrayHarga[i] = Double.parseDouble(parts[parts.length-1]);
+                if (!menuInvalid) {
+                    arrayHarga[i] = Double.parseDouble(parts[parts.length-1]);
+                }
             }
         
             if (menuInvalid) {
@@ -263,7 +258,9 @@ public class MainMenu {
     }
 
     public static void handleHapusRestoran() {
-        // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
+        Restaurant restoran = inputRestaurant();
+        restoList.remove(restoran);
+        System.out.print("Restoran berhasil dihapus.");
     }
 
 	public static void sortMenu(ArrayList<Menu> items, int n) {
@@ -314,6 +311,22 @@ public class MainMenu {
             menginputOrderID = false;
         }
         return pesanan;
+    }
+
+    public static Restaurant inputRestaurant() {
+        boolean menginputResto = true;
+        Restaurant restoran = null;
+        String namaRestoran;
+        while (menginputResto) {
+            System.out.print("Nama Restoran: "  );
+            namaRestoran = input.nextLine();
+            restoran = cariResto(namaRestoran);
+            if (restoran == null) {
+                System.out.println("Restoran tidak terdaftar pada sistem.\n");
+                continue;
+            } menginputResto = false;
+        }
+        return restoran;
     }
 
     public static boolean isNumeric(String str) {
