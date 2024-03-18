@@ -3,6 +3,7 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class Order {
+    // Atribut class Order
     private String orderID;
     private String tanggalPemesanan;
     private int biayaOngkosKirim;
@@ -20,6 +21,7 @@ public class Order {
         } 
     }
 
+    // Method Getter
     public String getOrderID() {
         return this.orderID;
     }
@@ -44,6 +46,7 @@ public class Order {
         return this.orderFinished;
     }
 
+    // Method untuk menyelesaikan order
     public void finishOrder() {
         this.orderFinished = true;
     }
