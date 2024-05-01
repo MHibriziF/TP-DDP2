@@ -1,12 +1,25 @@
 package assignments.assignment3.systemCLI;
 
-import java.util.Scanner;
+import java.util.ArrayList;
+import assignments.assignment3.copyassignment2.*;
+import assignments.assignment3.payment.CreditCardPayment;
+import assignments.assignment3.payment.DebitPayment;
+import assignments.assignment3.payment.DepeFoodPaymentSystem;
+import assignments.assignment3.MainMenu;
 
-//TODO: Extends abstract class yang diberikan
-public class CustomerSystemCLI {
+public class CustomerSystemCLI extends UserSystemCLI {
+    private static ArrayList<Restaurant> restoList;
+    private static User userLoggedIn;
 
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
-    boolean handleMenu(int choice){
+    @Override
+    public void run() {
+        userLoggedIn = MainMenu.getUserLoggedIn();
+        restoList = MainMenu.getRestoList();
+        super.run();
+    }
+
+    @Override
+    public boolean handleMenu(int choice){
         switch(choice){
             case 1 -> handleBuatPesanan();
             case 2 -> handleCetakBill();
@@ -21,8 +34,8 @@ public class CustomerSystemCLI {
         return true;
     }
 
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
-    void displayMenu() {
+    @Override
+    public void displayMenu() {
         System.out.println("\n--------------------------------------------");
         System.out.println("Pilih menu:");
         System.out.println("1. Buat Pesanan");
@@ -36,26 +49,234 @@ public class CustomerSystemCLI {
     }
 
     void handleBuatPesanan(){
-        // TODO: Implementasi method untuk handle ketika customer membuat pesanan
+        boolean membuatPesanan = true;
+        Restaurant restoran = null;
+        String namaRestoran, tanggalPemesanan;
+        int jumlahPesanan;
+        System.out.println("--------------Buat Pesanan--------------");
+        while (membuatPesanan) {
+            // Menghandle input
+            System.out.print("Nama Restoran: ");
+            namaRestoran = input.nextLine();
+            restoran = cariResto(namaRestoran);
+            // Meminta input kembali jika restoran tidak ditemukan
+            if (restoran == null) {
+                System.out.println("Restoran tidak terdaftar pada sistem.\n");
+                continue;
+            }
+
+            System.out.print("Tanggal Pemesanan (DD/MM/YYYY): ");
+            tanggalPemesanan = input.nextLine();
+            // Meminta input kembali jika format tanggal tidak valid
+            if (OrderGenerator.checkDate(tanggalPemesanan) == false) {
+                System.out.println("Tanggal Pemesanan dalam format DD/MM/YYYY!\n");
+                continue;
+            }
+
+            System.out.print("Jumlah Pesanan: ");
+            jumlahPesanan = Integer.parseInt(input.nextLine());
+            Menu[] pesanan = new Menu[jumlahPesanan];
+            
+            // Meminta orderan user
+            boolean orderTaken = false;
+            System.out.println("Order:");
+            for (int i = 0; i < jumlahPesanan; i++) {
+                orderTaken = false;
+                String orderan = input.nextLine();
+                for (Menu menu : restoran.getMenu()) {
+                    if (menu.getNamaMakanan().equals(orderan)) {
+                        pesanan[i] = menu;
+                        orderTaken = true;
+                        break;
+                    }
+                }
+                // Break dari loop jika menu tidak tersedia
+                if (!orderTaken) {
+                    System.out.println("Mohon memesan menu yang tersedia di Restoran!\n");
+                    break;
+                }
+            }
+
+            // Membuat Order dan menambahkannya ke order history user jika order berhasil diambil
+            // Meminta input ulang jika tidak berhasil
+            if (orderTaken){
+                int ongkir = hitungOngkir(userLoggedIn.getLokasi());
+                String orderID = OrderGenerator.generateOrderID(namaRestoran, tanggalPemesanan, userLoggedIn.getNomorTelepon());
+                Order userOrder = new Order(orderID, tanggalPemesanan, ongkir, restoran, pesanan);
+                userLoggedIn.addOrderHistory(userOrder);
+                System.out.printf("Pesanan dengan ID %s diterima!", orderID);
+                membuatPesanan = false;  
+            } else {
+                continue;
+            }
+        }
     }
 
     void handleCetakBill(){
-        // TODO: Implementasi method untuk handle ketika customer ingin cetak bill
+        System.out.println("--------------Cetak Bill----------------");
+        Order pesanan = inputOrderID();
+        String bill = buatBill(pesanan);
+        System.out.println(bill);
     }
 
     void handleLihatMenu(){
-        // TODO: Implementasi method untuk handle ketika customer ingin melihat menu
+        System.out.println("--------------Lihat Menu--------------");
+        Restaurant restoran = inputRestaurant();
+        ArrayList<Menu> menuRestoran = restoran.getMenu();
+        for (int i = 1; i <= menuRestoran.size(); i++) {
+            Menu item = menuRestoran.get(i-1);
+            if (i == menuRestoran.size()) {
+                System.out.printf("%d. %s %d", i, item.getNamaMakanan(), (int) item.getHarga());
+                break;
+            }
+            System.out.printf("%d. %s %d\n", i, item.getNamaMakanan(), (int) item.getHarga());
+        }
     }
 
     void handleBayarBill(){
-        // TODO: Implementasi method untuk handle ketika customer ingin melihat menu
+        Order order = inputOrderID();
+        if (order.getOrderFinished() == false) {
+            System.out.println(buatBill(order));
+            handleUpdateStatusPesanan(order);
+        } else {
+            System.out.println("Pesanan dengan ID ini sudah lunas!");
+        }
     }
 
-    void handleUpdateStatusPesanan(){
-        // TODO: Implementasi method untuk handle ketika customer ingin update status pesanan
+    void handleUpdateStatusPesanan(Order order){
+        System.out.println();
+        System.out.println("Opsi Pembayaran:");
+        System.out.println("1. Credit Card");
+        System.out.println("2. Debit");
+        System.out.print("Pilihan Metode Pembayaran: ");
+        String pilihanMetode = input.nextLine();
+
+        DepeFoodPaymentSystem payment = userLoggedIn.getPayment();
+        if (pilihanMetode.trim().equals("1")) {
+            if (payment instanceof CreditCardPayment) {
+                ((CreditCardPayment) payment).processPayment((long) order.getTotalHarga(), userLoggedIn, order);
+            } else {
+                System.out.println("User belum memiliki metode pembayaran ini!");
+            }
+        } else if (pilihanMetode.trim().equals("2")) {
+            if (payment instanceof DebitPayment) {
+                ((DebitPayment) payment).processPayment((long) order.getTotalHarga(), userLoggedIn, order);
+            } else {
+                System.out.println("User belum memiliki metode pembayaran ini!");
+            }
+        } else {
+            System.out.println("Input hanya berupa angka 1 atau 2");
+        }
     }
 
     void handleCekSaldo(){
-        // TODO: Implementasi method untuk handle ketika customer ingin mengecek saldo yang dimiliki
+        System.out.printf("Sisa saldo sebesar Rp %d\n", userLoggedIn.getSaldo());
+    }
+
+    public String buatBill(Order order) {
+        String bill = "\nBill:\n";
+        bill += String.format("Order ID: %s\n", order.getOrderId());
+        bill += String.format("Tanggal Pemesanan: %s\n", order.getTanggal());
+        bill += String.format("Restaurant: %s\n", order.getRestaurant().getNama());
+        bill += String.format("Lokasi Pengiriman: %s\n", userLoggedIn.getLokasi());
+        bill += String.format("Status Pengiriman: %s\n", order.getOrderFinished() ? "Selesai" : "Not Finished");
+        bill += "Pesanan:\n"; 
+        
+        for (Menu item : order.getItems()) {
+            bill += String.format("-%s %d\n", item.getNamaMakanan(), (int) item.getHarga());
+        }
+
+        bill += String.format("Biaya Ongkos Kirim: Rp %d\n", order.getOngkir());
+        bill += String.format("Total Biaya: Rp %d", (int) order.getTotalHarga());
+        return bill;
+    }
+    
+    /**
+     * Method ini digunakan untuk mendapatkan Order dari Order ID yang diinput user
+     * @return Order pesanan user
+     */
+    public static Order inputOrderID() {
+        boolean menginputOrderID = true;
+        Order pesanan = null;
+        String orderId;
+        while (menginputOrderID) {
+            System.out.print("Masukkan Order ID: ");
+            orderId = input.nextLine();
+            pesanan = cariOrder(orderId);
+            if (pesanan == null) {
+                System.out.println("Order ID tidak dapat ditemukan.\n");
+                continue;
+            }
+            menginputOrderID = false;
+        }
+        return pesanan;
+    }
+
+    /**
+     * Method ini digunakan untuk mendapatkan Restauran dari nama restoran yang diinput user
+     * @return Restaurant yang diinput
+     */
+    public static Restaurant inputRestaurant() {
+        boolean menginputResto = true;
+        Restaurant restoran = null;
+        String namaRestoran;
+        while (menginputResto) {
+            System.out.print("Nama Restoran: "  );
+            namaRestoran = input.nextLine();
+            restoran = cariResto(namaRestoran);
+            if (restoran == null) {
+                System.out.println("Restoran tidak terdaftar pada sistem.\n");
+                continue;
+            } menginputResto = false;
+        }
+        return restoran;
+    }
+
+    /**
+     * Method ini digunakan untuk mencari orderan user
+     * @param orderID String Order ID user
+     * @return objek Order yang dicari (null jika tidak ada) 
+     */
+    public static Order cariOrder(String orderID) {
+        for (Order order : userLoggedIn.getOrderHistory()) {
+            if (order.getOrderId().equals(orderID)) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    /** 
+     * Method untuk mencari restoran
+     * @param namaRestoran nama restoran yang dicari
+     * @return Objek restoran yang dicari (null jika tidak ada)
+     */
+    public static Restaurant cariResto(String namaRestoran) {
+        for (Restaurant resto: restoList) {
+            if (resto.getNama().equalsIgnoreCase(namaRestoran)) {
+                return resto;
+            }
+        }
+        return null;
+    }
+    /**
+     * Method ini digunakan untuk menghitung ongkir
+     * @param lokasi String berupa lokasi user
+     * @return
+     */
+    public static int hitungOngkir(String lokasi) {
+        int ongkosKirim = 0;
+        if (lokasi.equals("P")) {
+            ongkosKirim = 10000; 
+        } else if (lokasi.equals("U")) {
+            ongkosKirim = 20000;
+        } else if (lokasi.equals("T")) {
+            ongkosKirim = 35000;
+        } else if (lokasi.equals("S")) {
+            ongkosKirim = 40000;
+        } else if (lokasi.equals("B")) {
+            ongkosKirim = 60000;
+        }
+        return ongkosKirim;
     }
 }

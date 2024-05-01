@@ -1,7 +1,8 @@
 package assignments.assignment3.payment;
 
+import assignments.assignment3.copyassignment2.Order;
+import assignments.assignment3.copyassignment2.User;
+
 public interface DepeFoodPaymentSystem {
-    //TODO implementasikan interface di sini
-    // Atribut harap mengikuti dokumen soal
-    // Anda dibebaskan untuk membuat method yang diperlukan
+    public abstract void processPayment(long amount, User userLoggedIn, Order order);
 }

@@ -3,9 +3,9 @@ package assignments.assignment3;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import assignments.assignment2.Restaurant;
-import assignments.assignment2.User;
-import assignments.assignment3.LoginManager
+import assignments.assignment3.copyassignment2.Restaurant;
+import assignments.assignment3.copyassignment2.User;
+import assignments.assignment3.LoginManager;
 import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.systemCLI.AdminSystemCLI;
@@ -16,7 +16,8 @@ public class MainMenu {
     private final LoginManager loginManager;
     private static ArrayList<Restaurant> restoList;
     private static ArrayList<User> userList;
-
+    private static User userLoggedIn;
+ 
     public MainMenu(Scanner in, LoginManager loginManager) {
         this.input = in;
         this.loginManager = loginManager;
@@ -24,6 +25,8 @@ public class MainMenu {
 
     public static void main(String[] args) {
         MainMenu mainMenu = new MainMenu(new Scanner(System.in), new LoginManager(new AdminSystemCLI(), new CustomerSystemCLI()));
+        initUser();
+        restoList = new ArrayList<>();
         mainMenu.run();
     }
 
@@ -45,17 +48,47 @@ public class MainMenu {
     }
 
     private void login(){
-        System.out.println("\nSilakan Login:");
-        System.out.print("Nama: ");
-        String nama = input.nextLine();
-        System.out.print("Nomor Telepon: ");
-        String noTelp = input.nextLine();
+        boolean isLoggedIn = false;
+        while (!isLoggedIn) {
+            System.out.println("\nSilakan Login:");
+            System.out.print("Nama: ");
+            String nama = input.nextLine();
+            System.out.print("Nomor Telepon: ");
+            String noTelp = input.nextLine();
+            userLoggedIn = getUser(nama, noTelp);
+            // Meminta input ulang jika user tidak ditemukan
+            if (userLoggedIn == null) {
+                System.out.println("Pengguna dengan data tersebut tidak ditemukan!");
+                continue;
+            }
+            isLoggedIn = true;
+        }
+        userLoggedIn = MainMenu.getUserLoggedIn();
+        System.out.printf("Selamat Datang %s!", userLoggedIn.getNama());
+        loginManager.getSystem(userLoggedIn.role).run();
+    }
 
-        // TODO: Validasi input login
+    /**
+     * Method ini digunakan untuk mendapatkan user
+     * @param nama String nama user
+     * @param nomorTelepon String nomor telepon user
+     * @return Objek User yang dicari (null jika tidak ada)
+     */
+    public static User getUser(String nama, String nomorTelepon) {
+        for (User user : userList) {
+            if (user.getNama().equals(nama) && user.getNomorTelepon().equals(nomorTelepon)) {
+                return user;
+            }
+        }
+        return null;
+    }
 
-        User userLoggedIn; // TODO: lengkapi
+    public static ArrayList<Restaurant> getRestoList() {
+        return restoList;
+    }
 
-        loginManager.getSystem(userLoggedIn.role);
+    public static User getUserLoggedIn() {
+        return userLoggedIn;
     }
 
     private static void printHeader(){
@@ -81,7 +114,6 @@ public class MainMenu {
     public static void initUser(){
         userList = new ArrayList<User>();
 
-        //TODO: Adjust constructor dan atribut pada class User di Assignment 2
         userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
         userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer", new CreditCardPayment(), 2000000));
         userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer", new DebitPayment(), 750000));
