@@ -116,13 +116,14 @@ public class CustomerSystemCLI extends UserSystemCLI {
         System.out.println("--------------Cetak Bill----------------");
         Order pesanan = inputOrderID();
         String bill = buatBill(pesanan);
-        System.out.println(bill);
+        System.out.print(bill);
     }
 
     void handleLihatMenu(){
         System.out.println("--------------Lihat Menu--------------");
         Restaurant restoran = inputRestaurant();
         ArrayList<Menu> menuRestoran = restoran.getMenu();
+        System.out.println("Menu:");
         for (int i = 1; i <= menuRestoran.size(); i++) {
             Menu item = menuRestoran.get(i-1);
             if (i == menuRestoran.size()) {
@@ -156,21 +157,22 @@ public class CustomerSystemCLI extends UserSystemCLI {
             if (payment instanceof CreditCardPayment) {
                 ((CreditCardPayment) payment).processPayment((long) order.getTotalHarga(), userLoggedIn, order);
             } else {
-                System.out.println("User belum memiliki metode pembayaran ini!");
+                System.out.print("User belum memiliki metode pembayaran ini!");
             }
         } else if (pilihanMetode.trim().equals("2")) {
             if (payment instanceof DebitPayment) {
                 ((DebitPayment) payment).processPayment((long) order.getTotalHarga(), userLoggedIn, order);
             } else {
-                System.out.println("User belum memiliki metode pembayaran ini!");
+                System.out.print("User belum memiliki metode pembayaran ini!");
             }
         } else {
-            System.out.println("Input hanya berupa angka 1 atau 2");
+            System.out.print("Input hanya berupa angka 1 atau 2");
         }
     }
 
     void handleCekSaldo(){
-        System.out.printf("Sisa saldo sebesar Rp %d\n", userLoggedIn.getSaldo());
+        System.out.println();
+        System.out.printf("Sisa saldo sebesar Rp %d", userLoggedIn.getSaldo());
     }
 
     public String buatBill(Order order) {

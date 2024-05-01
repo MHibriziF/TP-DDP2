@@ -39,18 +39,22 @@ public class AdminSystemCLI extends UserSystemCLI{
     protected void handleTambahRestoran(){
         System.out.println("--------------Tambah Restoran---------------");
         Restaurant restaurant = null;
+        // Meminta input hingga valid
         while (restaurant == null) {
             String namaRestaurant = getValidRestaurantName();
             restaurant = new Restaurant(namaRestaurant);
             restaurant = handleTambahMenuRestaurant(restaurant);
         }
+        // Menambahkan restoran
         restoList.add(restaurant);
-        System.out.print("Restaurant "+restaurant.getNama()+" Berhasil terdaftar." );
+        System.out.print("Restaurant " + restaurant.getNama() +" Berhasil terdaftar." );
     }
 
     protected void handleHapusRestoran(){
         System.out.println("--------------Hapus Restoran----------------");
+        // Menerima input restoran
         Restaurant restoran = inputRestaurant();
+        // Menghappus restoran
         restoList.remove(restoran);
         System.out.print("Restoran berhasil dihapus.");
     }
@@ -60,11 +64,14 @@ public class AdminSystemCLI extends UserSystemCLI{
         int  jumlahMenu = Integer.parseInt(input.nextLine().trim());
         boolean isMenuValid = true;
         for(int i = 0; i < jumlahMenu; i++){
+            // Menerima input makanan
             String inputValue = input.nextLine().trim();
             String[] splitter = inputValue.split(" ");
             String hargaStr = splitter[splitter.length-1];
             boolean isDigit = checkIsDigit(hargaStr);
             String namaMenu = String.join(" ", Arrays.copyOfRange(splitter, 0, splitter.length - 1));
+
+            // Jika bagian terakhir bukan digit, tambahkan ke menu
             if(isDigit){
                 int hargaMenu = Integer.parseInt(hargaStr);
                 restoran.addMenu(new Menu(namaMenu, hargaMenu));
@@ -73,6 +80,7 @@ public class AdminSystemCLI extends UserSystemCLI{
                 isMenuValid = false;
             }
         }
+        // Cek apakah menu valid
         if(!isMenuValid){
             System.out.println("Harga menu harus bilangan bulat!");
             System.out.println();
@@ -83,6 +91,7 @@ public class AdminSystemCLI extends UserSystemCLI{
 
     public static String getValidRestaurantName() {
         String name = "";
+        // Menerima input hingga nama restoran valid
         boolean isRestaurantNameValid = false;
         while (!isRestaurantNameValid) {
             System.out.print("Nama: ");
@@ -117,6 +126,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         boolean menginputResto = true;
         Restaurant restoran = null;
         String namaRestoran;
+        // Meminta input restoran hingga valid
         while (menginputResto) {
             System.out.print("Nama Restoran: "  );
             namaRestoran = input.nextLine();

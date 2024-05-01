@@ -43,11 +43,12 @@ public class MainMenu {
                 default -> System.out.println("Pilihan tidak valid, silakan coba lagi.");
             }
         }
-
+        System.out.println("Terima kasih telah menggunakan DepeFood!");
         input.close();
     }
 
     private void login(){
+        // Meminta input selama belum login
         boolean isLoggedIn = false;
         while (!isLoggedIn) {
             System.out.println("\nSilakan Login:");
@@ -56,6 +57,7 @@ public class MainMenu {
             System.out.print("Nomor Telepon: ");
             String noTelp = input.nextLine();
             userLoggedIn = getUser(nama, noTelp);
+
             // Meminta input ulang jika user tidak ditemukan
             if (userLoggedIn == null) {
                 System.out.println("Pengguna dengan data tersebut tidak ditemukan!");
@@ -63,7 +65,7 @@ public class MainMenu {
             }
             isLoggedIn = true;
         }
-        userLoggedIn = MainMenu.getUserLoggedIn();
+        // User berhasil log in dan memasuki systemCLI
         System.out.printf("Selamat Datang %s!", userLoggedIn.getNama());
         loginManager.getSystem(userLoggedIn.role).run();
     }
@@ -83,10 +85,12 @@ public class MainMenu {
         return null;
     }
 
+    // Method ini digunakan untuk mengambil list restoran
     public static ArrayList<Restaurant> getRestoList() {
         return restoList;
     }
 
+    // Method ini digunakan untuk mengambil user yang sedang log in
     public static User getUserLoggedIn() {
         return userLoggedIn;
     }
