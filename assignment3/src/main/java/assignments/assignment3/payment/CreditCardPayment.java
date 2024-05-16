@@ -1,5 +1,6 @@
 package assignments.assignment3.payment;
 
+<<<<<<< HEAD
 import assignments.assignment3.copyassignment2.User;
 import assignments.assignment3.copyassignment2.Order;
 import assignments.assignment3.copyassignment2.Restaurant;
@@ -22,3 +23,13 @@ public class CreditCardPayment implements DepeFoodPaymentSystem{
         return (long) (amount * TRANSACTION_FEE_PERCENTAGE);
     }
 }
+=======
+public class CreditCardPayment implements DepeFoodPaymentSystem {
+    private static final double TRANSACTION_FEE_PERCENTAGE = 0.02;
+
+    @Override
+    public long processPayment(long saldo, long amount) {
+        return amount + (long) (amount * TRANSACTION_FEE_PERCENTAGE);
+    }
+}
+>>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
