@@ -6,25 +6,18 @@ import java.text.DecimalFormatSymbols;
 
 public class OrderGenerator {
     private static final Scanner input = new Scanner(System.in);
-<<<<<<< HEAD
-=======
     private static final int ORDER_ID_LENGTH = 16;
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
 
     /*
      * Anda boleh membuat method baru sesuai kebutuhan Anda
      * Namun, Anda tidak boleh menghapus ataupun memodifikasi return type method
      * yang sudah ada.
      */
-<<<<<<< HEAD
-    public static void showMenu() {
-=======
 
     /*
      * Method ini untuk menampilkan DepeFood
      */
     public static void initMenu() {
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
         System.out.println(">>=======================================<<");
         System.out.println("|| ___                 ___             _ ||");
         System.err.println("||| . \\ ___  ___  ___ | __>___  ___  _| |||");
@@ -159,16 +152,6 @@ public class OrderGenerator {
      * @return String Order ID dengan format sesuai pada dokumen soal
      */
     public static String generateOrderID(String namaRestoran, String tanggalOrder, String noTelepon) {
-<<<<<<< HEAD
-        String orderID = "";
-        orderID += namaRestoran.substring(0, 4).toUpperCase();
-        orderID += getKodeTanggal(tanggalOrder);
-        orderID += getKodeTelepon(noTelepon);
-        orderID += checksum(orderID);
-        return orderID;
-    }
-=======
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
 
         String restaurantCode = getRestaurantCode(namaRestoran);
         String formattedDate = formatDate(tanggalOrder);
@@ -192,36 +175,6 @@ public class OrderGenerator {
      * Lokasi Pengiriman: [Kode Lokasi]
      * Biaya Ongkos Kirim: [Total Ongkos Kirim]
      */
-<<<<<<< HEAD
-    public static String generateBill(String orderID, String lokasi){
-        String ongkosKirim = "";
-        lokasi = lokasi.toUpperCase();
-
-        // Memberikan ongkos kirim sesuai lokasi
-        if (lokasi.equals("P")) {
-            ongkosKirim = "Rp 10.000"; 
-        } else if (lokasi.equals("U")) {
-            ongkosKirim = "Rp 20.000";
-        } else if (lokasi.equals("T")) {
-            ongkosKirim = "Rp 35.000";
-        } else if (lokasi.equals("S")) {
-            ongkosKirim = "Rp 40.000";
-        } else if (lokasi.equals("B")) {
-            ongkosKirim = "Rp 60.000";
-        }
-
-        // Menyusun tanggal pemesanan dari Order ID
-        String tanggalPemenesanan = orderID.substring(4, 6) + "/" + orderID.substring(6, 8) + "/" + orderID.substring(8, 12); 
-
-        // Menyusun bill
-        String bill = String.format("Bill:\n");
-        bill += String.format("Order ID: %s\n", orderID);
-        bill += String.format("Tanggal Pemesanan: %s\n", tanggalPemenesanan);
-        bill += String.format("Lokasi Pengiriman: %s\n", lokasi);
-        bill += String.format("Biaya Ongkos Kirim: %s\n", ongkosKirim);
-
-        return bill;
-=======
     public static String generateBill(String OrderID, String lokasi) {
         String formattedDate = OrderID.substring(4, 12);
         String tanggalPemesanan = formattedDate.substring(0, 2) + "/" + formattedDate.substring(2, 4) + "/"
@@ -434,7 +387,6 @@ public class OrderGenerator {
             System.out.println(generateBill(orderID, lokasi));
             isInputValid = true;
         }
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
     }
 
     /*
@@ -488,111 +440,6 @@ public class OrderGenerator {
         return true;
     }
     public static void main(String[] args) {
-<<<<<<< HEAD
-        // Inisialisasi variable
-        String pilihanMenu = "";
-        String namaRestoran, tanggalPemesanan, noTelepon;
-        showMenu();
-
-        // Meminta input selama belum memilih keluar (3)
-        while (!pilihanMenu.equals("3")) {
-            printBarrier();
-
-            // Meminta pilihan user
-            System.out.print("Pilihan menu: ");
-            pilihanMenu = input.nextLine();
-
-            // User memilih untuk mengenerate Order ID
-            if (pilihanMenu.equals("1")) {
-
-                // Meminta input selama melakukan pemesanan
-                boolean melakukanPemesanan = true;
-                while (melakukanPemesanan) {
-                    System.out.println();
-
-                    // Meminta nama restoran dan menguji kevalidannya
-                    System.out.print("Nama Restoran: ");
-                    namaRestoran = input.nextLine();
-                    namaRestoran = namaRestoran.replaceAll(" ", "");
-                    if (namaRestoran.length() < 4) {
-                        System.out.println("Nama Restoran tidak valid!");
-                        continue;
-                    }
-
-                    // Meminta tanggal pemesanan dan menguji kevalidannya
-                    System.out.print("Tanggal Pemesanan: ");
-                    tanggalPemesanan = input.nextLine();
-                    if (checkDate(tanggalPemesanan) == false) {
-                        System.out.println("Tanggal Pemesanan dalam format DD/MM/YYYY!");
-                        continue;
-                    }
-
-                    // Meminta no. telepon dan menguji kevalidannya
-                    System.out.print("No. Telpon: ");
-                    noTelepon = input.nextLine();
-                    if (checkTelephoneNo(noTelepon) == false) {
-                        System.out.println("Harap masukkan nomor telepon dalam bentuk bilangan bulat positif.");
-                        continue;
-                    }
-
-                    // Mengenerate Order ID setelah semua input valid
-                    String orderID = generateOrderID(namaRestoran, tanggalPemesanan, noTelepon);
-                    System.out.printf("Order ID %s diterima!%n", orderID);
-                    
-                    // Selesai memesan
-                    melakukanPemesanan = false;
-                }
-            }
-
-            // User memilih untuk mengenerate bill
-            else if (pilihanMenu.equals("2")) {
-                String orderID, lokasiPengiriman;
-
-                // Meminta input selama melakukan billing
-                boolean melakukanBilling = true;
-                while (melakukanBilling) {
-                    // Meminta Order ID dan menguji kevalidannya
-                    System.out.print("Order ID: ");
-                    orderID = input.nextLine();
-                    if (orderID.length() < 16) {
-                        System.out.println("Order ID minimal 16 karakter\n");
-                        continue;
-                    }
-                    if (checkOrderID(orderID) == false) {
-                        System.out.println("Silahkan masukkan Order ID yang valid!\n");
-                        continue;
-                    }
-
-                    // Meminta lokasi pengiriman dan menguji kejangkauannya
-                    System.out.print("Lokasi Pengiriman: ");
-                    lokasiPengiriman = input.nextLine().toUpperCase();
-                    if (!lokasiPengiriman.equals("P") && !lokasiPengiriman.equals("U") &&
-                    !lokasiPengiriman.equals("T") && !lokasiPengiriman.equals("S") && !lokasiPengiriman.equals("B")) {
-                        System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
-                        continue;
-                    }
-
-                    // Mengenerate bill setelah semua input valid
-                    String bill = generateBill(orderID, lokasiPengiriman);
-                    System.out.println();
-                    System.out.print(bill);
-
-                    // Selesai melakukan billing
-                    melakukanBilling = false;
-                }
-            } 
-            
-            // User memilih untuk keluar
-            else if (pilihanMenu.equals("3")) {
-                System.out.println("Terima kasih telah menggunakan DepeFood!");
-                break;
-            }
-            printBarrier();
-            showMenu2();
-        }
-        input.close();
-    }   
-=======
         boolean isRunning = true;
 
         initMenu();
@@ -620,5 +467,4 @@ public class OrderGenerator {
             System.out.println("--------------------------------------------");
         }
     }
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
 }

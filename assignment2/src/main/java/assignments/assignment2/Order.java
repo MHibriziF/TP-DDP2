@@ -3,45 +3,6 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class Order {
-<<<<<<< HEAD
-    // Atribut class Order
-    private String orderID;
-    private String tanggalPemesanan;
-    private int biayaOngkosKirim;
-    private Restaurant restaurant;
-    private ArrayList<Menu> items;
-    private boolean orderFinished;
-    public Order(String orderId, String tanggal, int ongkir, Restaurant resto, Menu[] items){
-        this.orderID = orderId;
-        this.tanggalPemesanan = tanggal;
-        this.biayaOngkosKirim = ongkir;
-        this.restaurant = resto;
-        this.items = new ArrayList<Menu>();
-        for (Menu item :items) {
-            this.items.add(item);
-        } 
-    }
-
-    // Method Getter
-    public String getOrderID() {
-        return this.orderID;
-    }
-
-    public String getTanggalPemesanan() {
-        return this.tanggalPemesanan;
-    }
-
-    public int getOngkosKirim() {
-        return this.biayaOngkosKirim;
-    }
-
-    public Restaurant getRestaurant() {
-        return this.restaurant;
-    }
-
-    public ArrayList<Menu> getItems() {
-        return this.items;
-=======
 
     private String orderId;
     private String tanggal;
@@ -61,18 +22,12 @@ public class Order {
 
     public Restaurant getRestaurant() {
         return restaurant;
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
     }
 
     public boolean getOrderFinished() {
         return this.orderFinished;
     }
 
-<<<<<<< HEAD
-    // Method untuk menyelesaikan order
-    public void finishOrder() {
-        this.orderFinished = true;
-=======
     public void setOrderFinished(boolean orderFinished) {
         this.orderFinished = orderFinished;
     }
@@ -118,6 +73,5 @@ public class Order {
             sum += menu.getHarga();
         }
         return sum += getOngkir();
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
     }
 }

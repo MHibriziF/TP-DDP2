@@ -1,31 +1,5 @@
 package assignments.assignment2;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-
-public class Restaurant {
-    // Atribut class Restaurant
-    private String nama;
-    private ArrayList<Menu> menu;
-
-    public Restaurant(String nama){
-        this.nama = nama;
-        this.menu = new ArrayList<Menu>();
-    }
-
-    // Method getter
-    public String getNama() {
-        return this.nama;
-    }
-    
-    public ArrayList<Menu> getMenu() {
-        return this.menu;
-    }
-
-    // Method untuk menambah menu
-    public void addMenu(Menu item) {
-        menu.add(item);
-=======
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -82,6 +56,5 @@ public class Restaurant {
             menuString.deleteCharAt(menuString.length() - 1);
         }
         return menuString.toString();
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
     }
 }

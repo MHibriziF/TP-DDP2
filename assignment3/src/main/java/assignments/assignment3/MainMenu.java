@@ -3,12 +3,6 @@ package assignments.assignment3;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-<<<<<<< HEAD
-import assignments.assignment3.copyassignment2.Restaurant;
-import assignments.assignment3.copyassignment2.User;
-import assignments.assignment3.LoginManager;
-=======
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
 import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.systemCLI.AdminSystemCLI;
@@ -19,24 +13,14 @@ public class MainMenu {
     private final Scanner input;
     private final LoginManager loginManager;
     private static ArrayList<User> userList;
-<<<<<<< HEAD
-    private static User userLoggedIn;
- 
-=======
     private static ArrayList<Restaurant> restoList;
 
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
     public MainMenu(Scanner in, LoginManager loginManager) {
         this.input = in;
         this.loginManager = loginManager;
     }
 
     public static void main(String[] args) {
-<<<<<<< HEAD
-        MainMenu mainMenu = new MainMenu(new Scanner(System.in), new LoginManager(new AdminSystemCLI(), new CustomerSystemCLI()));
-        initUser();
-        restoList = new ArrayList<>();
-=======
         initUser();
 
         restoList = new ArrayList<>();
@@ -44,7 +28,6 @@ public class MainMenu {
         MainMenu mainMenu = new MainMenu(new Scanner(System.in),
                 new LoginManager(new AdminSystemCLI(), new CustomerSystemCLI()));
 
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
         mainMenu.run();
     }
 
@@ -65,54 +48,6 @@ public class MainMenu {
         input.close();
     }
 
-<<<<<<< HEAD
-    private void login(){
-        // Meminta input selama belum login
-        boolean isLoggedIn = false;
-        while (!isLoggedIn) {
-            System.out.println("\nSilakan Login:");
-            System.out.print("Nama: ");
-            String nama = input.nextLine();
-            System.out.print("Nomor Telepon: ");
-            String noTelp = input.nextLine();
-            userLoggedIn = getUser(nama, noTelp);
-
-            // Meminta input ulang jika user tidak ditemukan
-            if (userLoggedIn == null) {
-                System.out.println("Pengguna dengan data tersebut tidak ditemukan!");
-                continue;
-            }
-            isLoggedIn = true;
-        }
-        // User berhasil log in dan memasuki systemCLI
-        System.out.printf("Selamat Datang %s!", userLoggedIn.getNama());
-        loginManager.getSystem(userLoggedIn.role).run();
-    }
-
-    /**
-     * Method ini digunakan untuk mendapatkan user
-     * @param nama String nama user
-     * @param nomorTelepon String nomor telepon user
-     * @return Objek User yang dicari (null jika tidak ada)
-     */
-    public static User getUser(String nama, String nomorTelepon) {
-        for (User user : userList) {
-            if (user.getNama().equals(nama) && user.getNomorTelepon().equals(nomorTelepon)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-    // Method ini digunakan untuk mengambil list restoran
-    public static ArrayList<Restaurant> getRestoList() {
-        return restoList;
-    }
-
-    // Method ini digunakan untuk mengambil user yang sedang log in
-    public static User getUserLoggedIn() {
-        return userLoggedIn;
-=======
     private void login() {
         UserSystemCLI system;
         System.out.println("\nSilakan Login:");
@@ -138,7 +73,6 @@ public class MainMenu {
         system.setUserList(userList);
 
         system.run();
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
     }
 
     public static User getUser(String nama, String nomorTelepon) {
@@ -176,13 +110,6 @@ public class MainMenu {
     public static void initUser() {
         userList = new ArrayList<>();
 
-<<<<<<< HEAD
-        userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
-        userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer", new CreditCardPayment(), 2000000));
-        userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer", new DebitPayment(), 750000));
-        userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer", new CreditCardPayment(), 1800000));
-        userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer", new DebitPayment(), 650000));
-=======
         userList.add(
                 new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
         userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer",
@@ -193,7 +120,6 @@ public class MainMenu {
                 new CreditCardPayment(), 1800000));
         userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer", new DebitPayment(),
                 650000));
->>>>>>> 2de87934941926ea08452f88727b4221a5edf9d5
 
         userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
         userList.add(
