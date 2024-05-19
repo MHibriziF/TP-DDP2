@@ -129,9 +129,12 @@ public class DepeFood {
         return null;
     }
 
-    public static String handleBuatPesanan(String namaRestoran, String tanggalPemesanan, int jumlahPesanan, List<String> listMenuPesananRequest) {
+    public static String handleBuatPesanan(String namaRestoran, String tanggalPemesanan, int jumlahPesanan, List<String> listMenuPesananRequest, User userLoggedIn) {
+        if (jumlahPesanan == 0) {
+            return null;
+        }
+
         System.out.println("--------------Buat Pesanan----------------");
-    
         Restaurant restaurant = getRestaurantByName(namaRestoran);
         if (restaurant == null) {
             System.out.println("Restoran tidak terdaftar pada sistem.\n");
@@ -160,25 +163,27 @@ public class DepeFood {
         return order.getOrderId();
     }
 
-    public static void handleBayarBill(String orderId, String paymentOption) {
+    public static String handleBayarBill(String orderId, String paymentOption, User userLoggedIn) throws Exception {
         while (true) {
-            Order order = getOrderOrNull(orderId);
+            Order order = getOrderOrNull(orderId, userLoggedIn);
 
             if (order == null) {
                 System.out.println("Order ID tidak dapat ditemukan.\n");
-                continue;
+                return "no order";
             }
 
             if (order.getOrderFinished()) {
                 System.out.println("Pesanan dengan ID ini sudah lunas!\n");
-                return;
+                return "lunas";
             }
 
             System.out.print("Pilihan Metode Pembayaran: ");
-
+            if (paymentOption == null) {
+                return "no payment";
+            }
             if (!paymentOption.equals("Credit Card") && !paymentOption.equals("Debit")) {
                 System.out.println("Pilihan tidak valid, silakan coba kembali\n");
-                continue;
+                return "invalid payment";
             }
 
             DepeFoodPaymentSystem paymentSystem = userLoggedIn.getPaymentSystem();
@@ -187,7 +192,7 @@ public class DepeFood {
 
             if ((isCreditCard && paymentOption.equals("Debit")) || (!isCreditCard && paymentOption.equals("Credit Card"))) {
                 System.out.println("User belum memiliki metode pembayaran ini!\n");
-                continue;
+                return "incompatible payment";
             }
 
             long amountToPay = 0;
@@ -197,7 +202,7 @@ public class DepeFood {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println();
-                continue;
+                throw e;
             }
 
             long saldoLeft = userLoggedIn.getSaldo() - amountToPay;
@@ -212,16 +217,14 @@ public class DepeFood {
 
             System.out.printf("Berhasil Membayar Bill sebesar Rp %s", decimalFormat.format(amountToPay));
 
-            return;
+            return "success";
         }
     }
 
-    public static Order getOrderOrNull(String orderId) {
-        for (User user : userList) {
-            for (Order order : user.getOrderHistory()) {
-                if (order.getOrderId().equals(orderId)) {
-                    return order;
-                }
+    public static Order getOrderOrNull(String orderId, User user) {
+        for (Order order : user.getOrderHistory()) {
+            if (order.getOrderId().equals(orderId)) {
+                return order;
             }
         }
         return null;

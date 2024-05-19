@@ -1,5 +1,9 @@
 package assignments.assignment4.page;
 
+import java.util.List;
+
+import assignments.assignment3.Restaurant;
+import assignments.assignment3.DepeFood;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
@@ -20,9 +24,13 @@ public abstract class MemberMenu {
         return this.scene;
     }
 
-    protected void refresh(){
-        //TODO: Implemenetasi method ini untuk merefresh data yang dimiliki aplikasi
-        // Hint: Method ini digunakan pada *seluruh method* yang membutuhkan update
+    protected void refresh(List<Restaurant> restoList){
+        // Melakukan refresh pada data restoran
+        for (Restaurant restaurant : DepeFood.getRestoList()) {
+            if (!restoList.contains(restaurant)) {
+                restoList.add(restaurant);
+            }
+        }
     }
 
 }
